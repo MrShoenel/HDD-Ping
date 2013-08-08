@@ -60,29 +60,43 @@ namespace HDD_Ping
       var timer = new Timer(interval.TotalMilliseconds);
       timer.Elapsed += (s, e) =>
       {
-        if (settings.DriveSettings.Any(ds => ds.Ping))
-        {
-          this.SwitchToWorkingIcon();
-        }
-
-        foreach (var d in settings.DriveSettings.Where(ds => ds.Ping))
-        {
-          var guid = Guid.NewGuid().ToString();
-          try
-          {
-            File.WriteAllText(d.DriveInfo.Name + guid, guid);
-            File.Delete(d.DriveInfo.Name + guid);
-          }
-          catch { }
-        }
+        this.PingDrives();
       };
       timer.Start();
 
       return timer;
     }
 
+    private void PingDrives()
+    {
+      if (settings.DriveSettings.Any(ds => ds.Ping))
+      {
+        this.SwitchToWorkingIcon();
+      }
+
+      foreach (var ds in settings.DriveSettings)
+      {
+        var guid = Guid.NewGuid().ToString();
+        try
+        {
+          File.WriteAllText(ds.DriveInfo.Name + guid, guid);
+          File.Delete(ds.DriveInfo.Name + guid);
+        }
+        catch { }
+      }
+    }
+
     protected void CreateTrayOptions()
     {
+      var pingNowItem = new MenuItem("Ping now");
+      pingNowItem.Click += (s, e) =>
+      {
+        this.PingDrives();
+      };
+
+      trayMenu.MenuItems.Add(pingNowItem);
+      trayMenu.MenuItems.Add("-");
+
       var drivesMenu = new MenuItem("Ping Drives");
       var drives = DriveInfo.GetDrives();
 
