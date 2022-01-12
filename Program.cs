@@ -132,10 +132,10 @@ namespace HDD_Ping
 
       var timerMenu = new MenuItem("Interval");
       var timerItems = new Dictionary<MenuItem, int>();
-      int[] seconds = { 1, 2, 5, 10, 15, 20, 30, 45, 60 };
+      int[] seconds = { 1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120, 300 };
       foreach (var i in seconds)
       {
-        var tSec = new MenuItem(String.Format("{0} {1}", i, i == 1 ? "Second" : "Seconds"))
+        var tSec = new MenuItem(String.Format("{0} {1}", i < 60 ? i : (float)i / 60.0F, i == 1 ? "Second" : i < 60 ? "Seconds" : i < 120 ? "Minute" : "Minutes"))
         {
           Checked = (int)settings.Interval.TotalSeconds == i
         };
