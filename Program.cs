@@ -142,11 +142,8 @@ namespace HDD_Ping
         {
           var interval = timerItems[s as MenuItem];
           settings.Interval = TimeSpan.FromMinutes(interval);
-          
-          this.timer.Enabled = false;
-          this.timer.Stop();
-          this.timer.Dispose();
-          this.InitializeTimer(settings.Interval);
+
+          this.timer.Interval = settings.Interval.TotalMilliseconds;
 
           foreach (var ti in timerItems)
           {
