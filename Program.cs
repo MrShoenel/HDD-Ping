@@ -74,7 +74,7 @@ namespace HDD_Ping
         this.SwitchToWorkingIcon();
       }
 
-      foreach (var ds in settings.DriveSettings)
+      foreach (var ds in settings.DriveSettings.Where(ds => ds.Ping))
       {
         var guid = Guid.NewGuid().ToString();
         try
